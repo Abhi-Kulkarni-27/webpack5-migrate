@@ -224,7 +224,7 @@ module.exports = function (webpackEnv) {
           (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
       // Prevents conflicts when multiple webpack runtimes (from different apps)
       // are used on the same page.
-      jsonpFunction: `webpackJsonp${appPackageJson.name}`,
+      // jsonpFunction: `webpackJsonp${appPackageJson.name}`,
       // this defaults to 'window', but by setting it to 'this' then
       // module chunks which are built will work in web workers as well.
       globalObject: 'this',
@@ -369,30 +369,38 @@ module.exports = function (webpackEnv) {
 
         // First, run the linter.
         // It's important to do this before Babel processes the JS.
+        // NOTE : Disabling eslint as it produces issues with webpack-5.0.0.
+        // {
+        //   test: /\.(js|mjs|jsx|ts|tsx)$/,
+        //   enforce: 'pre',
+        //   use: [
+        //     {
+        //       options: {
+        //         cache: true,
+        //         formatter: require.resolve('react-dev-utils/eslintFormatter'),
+        //         eslintPath: require.resolve('eslint'),
+        //         resolvePluginsRelativeTo: __dirname,
+        //         // @remove-on-eject-begin
+        //         ignore: isExtendingEslintConfig,
+        //         baseConfig: isExtendingEslintConfig
+        //           ? undefined
+        //           : {
+        //               extends: [require.resolve('eslint-config-react-app')],
+        //             },
+        //         useEslintrc: isExtendingEslintConfig,
+        //         // @remove-on-eject-end
+        //       },
+        //       loader: require.resolve('eslint-loader'),
+        //     },
+        //   ],
+        //   include: paths.appSrc,
+        // },
+        // NOTE : Needs to be added for webpack-5.0.0.
         {
           test: /\.(js|mjs|jsx|ts|tsx)$/,
-          enforce: 'pre',
-          use: [
-            {
-              options: {
-                cache: true,
-                formatter: require.resolve('react-dev-utils/eslintFormatter'),
-                eslintPath: require.resolve('eslint'),
-                resolvePluginsRelativeTo: __dirname,
-                // @remove-on-eject-begin
-                ignore: isExtendingEslintConfig,
-                baseConfig: isExtendingEslintConfig
-                  ? undefined
-                  : {
-                      extends: [require.resolve('eslint-config-react-app')],
-                    },
-                useEslintrc: isExtendingEslintConfig,
-                // @remove-on-eject-end
-              },
-              loader: require.resolve('eslint-loader'),
-            },
-          ],
-          include: paths.appSrc,
+          resolve: {
+            fullySpecified: false,
+          },
         },
         {
           // "oneOf" will traverse all following loaders until one will
